@@ -63,6 +63,7 @@ private:
 
 	QElapsedTimer timer_;
 	size_t frameCount_ = 0;
+	size_t totalFrameCount_ = 0;
 
 	struct {
 		size_t fps = 0;

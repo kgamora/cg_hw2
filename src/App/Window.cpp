@@ -18,12 +18,22 @@
 namespace
 {
 
-constexpr std::array<GLfloat, 24u> vertices = {
-	0.0f, 0.707f, 0.f, 1.f, 0.f, 0.f, 0.0f, 0.0f,
-	-0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.5f, 1.0f,
-	0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.0f, 0.0f,
+constexpr std::array<GLfloat, 40u> vertices = {
+//	COORDS			 // COLORS		// TexCoord
+	-0.5f, -.3f,  0.5f, 0.f, 1.f, 0.f, 0.0f, 0.0f,
+	-0.5f, -.3f, -0.5f, 0.f, 0.f, 1.f, 5.0f, 0.0f,
+	 0.5f, -.3f, -0.5f, 1.f, 0.f, 1.f, 0.0f, 0.0f,
+	 0.5f, -.3f,  0.5f, 0.33f, 0.33f, 0.33f, 5.0f, 0.0f,
+	 0.0f, 0.7f,  0.0f, 1.f, 0.f, 0.f, 2.5f, 5.0f,
 };
-constexpr std::array<GLuint, 3u> indices = {0, 1, 2};
+constexpr std::array<GLuint, 18u> indices = {
+	0, 1, 2,
+	0, 2, 3,
+	0, 1, 4,
+	1, 2, 4,
+	2, 3, 4,
+	3, 0, 4
+};
 
 }// namespace
 
@@ -129,6 +139,9 @@ void Window::onRender()
 	// Calculate MVP matrix
 	model_.setToIdentity();
 	model_.translate(0, 0, -2);
+	float angle = (float)totalFrameCount_ * 0.5f;
+
+	model_.rotate(angle, {0.f, 1.f, 0.f});
 	view_.setToIdentity();
 	const auto mvp = projection_ * view_ * model_;
 
@@ -144,7 +157,7 @@ void Window::onRender()
 	texture_->bind();
 
 	// Draw
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, nullptr);
 
 	// Release VAO and shader program
 	texture_->release();
@@ -152,6 +165,7 @@ void Window::onRender()
 	program_->release();
 
 	++frameCount_;
+	++totalFrameCount_;
 
 	// Request redraw if animated
 	if (animated_)

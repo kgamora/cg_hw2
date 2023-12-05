@@ -12,5 +12,5 @@ out vec2 vert_tex;
 void main() {
 	vert_col = col;
 	vert_tex = tex;
-	gl_Position = mvp * vec4(pos.xy, 0.0, 1.0);
+        gl_Position = mvp * vec4(pos.xyz, 1.0);
 }
