@@ -18,10 +18,10 @@
 namespace
 {
 
-constexpr std::array<GLfloat, 21u> vertices = {
-	0.0f, 0.707f, 1.f, 0.f, 0.f, 0.0f, 0.0f,
-	-0.5f, -0.5f, 0.f, 1.f, 0.f, 0.5f, 1.0f,
-	0.5f, -0.5f, 0.f, 0.f, 1.f, 1.0f, 0.0f,
+constexpr std::array<GLfloat, 24u> vertices = {
+	0.0f, 0.707f, 0.f, 1.f, 0.f, 0.f, 0.0f, 0.0f,
+	-0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.5f, 1.0f,
+	0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.0f, 0.0f,
 };
 constexpr std::array<GLuint, 3u> indices = {0, 1, 2};
 
@@ -91,15 +91,15 @@ void Window::onInit()
 	program_->bind();
 
 	program_->enableAttributeArray(0);
-	program_->setAttributeBuffer(0, GL_FLOAT, 0, 2, static_cast<int>(7 * sizeof(GLfloat)));
+	program_->setAttributeBuffer(0, GL_FLOAT, 0, 3, static_cast<int>(8 * sizeof(GLfloat)));
 
 	program_->enableAttributeArray(1);
-	program_->setAttributeBuffer(1, GL_FLOAT, static_cast<int>(2 * sizeof(GLfloat)), 3,
-								 static_cast<int>(7 * sizeof(GLfloat)));
+	program_->setAttributeBuffer(1, GL_FLOAT, static_cast<int>(3 * sizeof(GLfloat)), 3,
+								 static_cast<int>(8 * sizeof(GLfloat)));
 
 	program_->enableAttributeArray(2);
-	program_->setAttributeBuffer(2, GL_FLOAT, static_cast<int>(5 * sizeof(GLfloat)), 2,
-								 static_cast<int>(7 * sizeof(GLfloat)));
+	program_->setAttributeBuffer(2, GL_FLOAT, static_cast<int>(6 * sizeof(GLfloat)), 2,
+								 static_cast<int>(8 * sizeof(GLfloat)));
 
 	mvpUniform_ = program_->uniformLocation("mvp");
 
