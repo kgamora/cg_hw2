@@ -1,5 +1,6 @@
 #pragma once
 
+#include "camera.h"
 #include <Base/GLWidget.hpp>
 
 #include <QElapsedTimer>
@@ -48,15 +49,13 @@ signals:
 	void updateUI();
 
 private:
+	Camera camera_;
+
 	GLint mvpUniform_ = -1;
 
 	QOpenGLBuffer vbo_{QOpenGLBuffer::Type::VertexBuffer};
 	QOpenGLBuffer ibo_{QOpenGLBuffer::Type::IndexBuffer};
 	QOpenGLVertexArrayObject vao_;
-
-	QMatrix4x4 model_;
-	QMatrix4x4 view_;
-	QMatrix4x4 projection_;
 
 	std::unique_ptr<QOpenGLTexture> texture_;
 	std::unique_ptr<QOpenGLShaderProgram> program_;

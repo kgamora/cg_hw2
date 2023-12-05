@@ -127,6 +127,9 @@ void Window::onInit()
 
 	// Clear all FBO buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Create camera
+	camera_ = Camera(800, 800, {0, 0, -2});
 }
 
 void Window::onRender()
@@ -136,21 +139,14 @@ void Window::onRender()
 	// Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Calculate MVP matrix
-	model_.setToIdentity();
-	model_.translate(0, 0, -2);
-	float angle = (float)totalFrameCount_ * 0.5f;
-
-	model_.rotate(angle, {0.f, 1.f, 0.f});
-	view_.setToIdentity();
-	const auto mvp = projection_ * view_ * model_;
-
 	// Bind VAO and shader program
 	program_->bind();
 	vao_.bind();
 
-	// Update uniform value
-	program_->setUniformValue(mvpUniform_, mvp);
+	const auto fov = 60.0f;
+	const auto zNear = 0.1f;
+	const auto zFar = 100.0f;
+	program_->setUniformValue(mvpUniform_, camera_.update(fov, zNear, zFar, totalFrameCount_));
 
 	// Activate texture unit and bind texture
 	glActiveTexture(GL_TEXTURE0);
@@ -179,13 +175,8 @@ void Window::onResize(const size_t width, const size_t height)
 	// Configure viewport
 	glViewport(0, 0, static_cast<GLint>(width), static_cast<GLint>(height));
 
-	// Configure matrix
-	const auto aspect = static_cast<float>(width) / static_cast<float>(height);
-	const auto zNear = 0.1f;
-	const auto zFar = 100.0f;
-	const auto fov = 60.0f;
-	projection_.setToIdentity();
-	projection_.perspective(fov, aspect, zNear, zFar);
+	// Update camera
+	camera_.resize(width, height);
 }
 
 Window::PerfomanceMetricsGuard::PerfomanceMetricsGuard(std::function<void()> callback)
