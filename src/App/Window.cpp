@@ -29,10 +29,10 @@ constexpr std::array<GLfloat, 40u> vertices = {
 constexpr std::array<GLuint, 18u> indices = {
 	0, 1, 2,
 	0, 2, 3,
-	0, 1, 4,
-	1, 2, 4,
-	2, 3, 4,
-	3, 0, 4
+	1, 0, 4,
+	2, 1, 4,
+	3, 2, 4,
+	0, 3, 4
 };
 
 }// namespace
@@ -182,6 +182,11 @@ void Window::onResize(const size_t width, const size_t height)
 Window::PerfomanceMetricsGuard::PerfomanceMetricsGuard(std::function<void()> callback)
 	: callback_{ std::move(callback) }
 {
+}
+
+void Window::keyPressEvent(QKeyEvent * e)
+{
+	camera_.input(e, true);
 }
 
 Window::PerfomanceMetricsGuard::~PerfomanceMetricsGuard()

@@ -69,4 +69,7 @@ private:
 	} ui_;
 
 	bool animated_ = true;
+
+protected:
+	void keyPressEvent(QKeyEvent * e) override;
 };
