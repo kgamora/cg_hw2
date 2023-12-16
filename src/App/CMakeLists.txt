@@ -4,6 +4,7 @@ set(SRCS
     Window.h
     camera.cpp
     camera.h
+    tiny_gltf.h
 
     Shaders/diffuse.fs
     Shaders/diffuse.vs
