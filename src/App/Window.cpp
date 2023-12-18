@@ -8,6 +8,7 @@
 #include <QScreen>
 
 #include <array>
+#include <iostream>
 
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -68,6 +69,28 @@ Window::~Window()
 	}
 }
 
+bool loadModel(tinygltf::Model &model, const char *filename) {
+	tinygltf::TinyGLTF loader;
+	std::string err;
+	std::string warn;
+
+	bool res = loader.LoadBinaryFromFile(&model, &err, &warn, filename);
+	if (!warn.empty()) {
+		std::cout << "WARN: " << warn << std::endl;
+	}
+
+	if (!err.empty()) {
+		std::cout << "ERR: " << err << std::endl;
+	}
+
+	if (!res)
+		std::cout << "Failed to load glTF: " << filename << std::endl;
+	else
+		std::cout << "Loaded glTF: " << filename << std::endl;
+
+	return res;
+}
+
 void Window::onInit()
 {
 	// Configure shaders
@@ -75,6 +98,11 @@ void Window::onInit()
 	program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Shaders/diffuse.vs");
 	program_->addShaderFromSourceFile(QOpenGLShader::Fragment,
 									  ":/Shaders/diffuse.fs");
+
+	tinygltf::Model model;
+	std::string filename = "/home/constantine/computer_graphics/cg_hw2/src/App/Models/chess.glb";
+	if (!loadModel(model, filename.c_str())) return;
+
 	program_->link();
 
 	// Create VAO object
