@@ -309,10 +309,6 @@ void Window::onRender()
 	program_->setUniformValue(sunPositionUniform_, camera_.position);
 	program_->setUniformValue(sunColorUniform_, QVector3D(1.0, 1.0, 1.0));
 
-	std::cout << "x: " << camera_.position.x() << std::endl;
-	std::cout << "y: " << camera_.position.y() << std::endl;
-	std::cout << "z: " << camera_.position.z() << std::endl;
-
 	// Draw
 	drawModel(vaoAndEbos_, model_);
 
