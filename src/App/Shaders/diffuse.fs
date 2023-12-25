@@ -2,6 +2,7 @@
 
 uniform sampler2D tex_2d;
 
+in vec3 normal;
 in vec2 vert_tex;
 
 out vec4 out_col;

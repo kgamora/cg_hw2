@@ -133,7 +133,6 @@ void bindMesh(std::map<int, GLuint>& vbos,
 			tinygltf::Texture &tex = model.textures[0];
 
 			if (tex.source > -1) {
-
 				funcs.glGenTextures(1, &texid);
 
 				tinygltf::Image &image = model.images[tex.source];
