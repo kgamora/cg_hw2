@@ -18,6 +18,7 @@
 
 namespace {
 	static QOpenGLFunctions_3_3_Core funcs;
+	static GLuint texid;
 }
 
 Window::Window() noexcept
@@ -133,7 +134,6 @@ void bindMesh(std::map<int, GLuint>& vbos,
 
 			if (tex.source > -1) {
 
-				GLuint texid;
 				funcs.glGenTextures(1, &texid);
 
 				tinygltf::Image &image = model.images[tex.source];
@@ -223,6 +223,8 @@ void drawMesh(const std::map<int, GLuint>& vbos,
 		tinygltf::Accessor indexAccessor = model.accessors[primitive.indices];
 
 		funcs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbos.at(indexAccessor.bufferView));
+
+		funcs.glBindTexture(GL_TEXTURE_2D, texid);
 
 		funcs.glDrawElements(primitive.mode, indexAccessor.count,
 					   indexAccessor.componentType,
