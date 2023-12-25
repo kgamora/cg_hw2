@@ -14,7 +14,7 @@ QMatrix4x4 Camera::update(float fovd, float near, float far, size_t totalFrameCo
 	// This is temporary
 	float angle = (float)totalFrameCount_ * 0.5f;
 
-	model.rotate(angle, {0.f, 1.f, 0.f});
+//	model.rotate(angle, {0.f, 1.f, 0.f});
 	view.setToIdentity();
 	view.lookAt(position, position + orientation, up);
 

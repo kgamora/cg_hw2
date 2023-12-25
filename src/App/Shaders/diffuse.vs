@@ -10,7 +10,7 @@ out vec3 vert_col;
 out vec2 vert_tex;
 
 void main() {
-	vert_col = col;
-	vert_tex = tex;
+        vert_col = col;
+        vert_tex = tex;
         gl_Position = mvp * vec4(pos.xyz, 1.0);
 }

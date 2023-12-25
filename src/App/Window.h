@@ -10,6 +10,8 @@
 #include <QOpenGLTexture>
 #include <QOpenGLVertexArrayObject>
 
+#include <tinygltf/tiny_gltf.h>
+
 #include <functional>
 #include <memory>
 
@@ -59,6 +61,9 @@ private:
 
 	std::unique_ptr<QOpenGLTexture> texture_;
 	std::unique_ptr<QOpenGLShaderProgram> program_;
+
+	tinygltf::Model model_;
+	std::pair<GLuint, std::map<int, GLuint>> vaoAndEbos_;
 
 	QElapsedTimer timer_;
 	size_t frameCount_ = 0;
