@@ -7,10 +7,12 @@ layout(location=2) in vec2 tex;
 uniform mat4 mvp;
 
 out vec3 normal;
+out vec3 position;
 out vec2 vert_tex;
 
 void main() {
         vert_tex = tex;
-        normal = in_normal;
+        normal = normalize(mat3(mvp) * in_normal);
         gl_Position = mvp * vec4(pos.xyz, 1.0);
+        position = gl_Position.xyz;
 }

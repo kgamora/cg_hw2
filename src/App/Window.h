@@ -54,6 +54,8 @@ private:
 	Camera camera_;
 
 	GLint mvpUniform_ = -1;
+	GLint sunPositionUniform_ = -1;
+	GLint sunColorUniform_ = -1;
 
 	QOpenGLBuffer vbo_{QOpenGLBuffer::Type::VertexBuffer};
 	QOpenGLBuffer ibo_{QOpenGLBuffer::Type::IndexBuffer};

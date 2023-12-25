@@ -275,6 +275,8 @@ void Window::onInit()
 	program_->bind();
 
 	mvpUniform_ = program_->uniformLocation("mvp");
+	sunPositionUniform_ = program_->uniformLocation("sun_position");
+	sunColorUniform_ = program_->uniformLocation("sun_color");
 
 	// Release all
 	program_->release();
@@ -287,7 +289,7 @@ void Window::onInit()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Create camera
-	camera_ = Camera(800, 800, {0, 0, -2});
+	camera_ = Camera(800, 800, {0, 0, -0.3});
 }
 
 void Window::onRender()
@@ -303,6 +305,13 @@ void Window::onRender()
 	const auto zNear = 0.1f;
 	const auto zFar = 100.0f;
 	program_->setUniformValue(mvpUniform_, camera_.update(fov, zNear, zFar, totalFrameCount_));
+
+	program_->setUniformValue(sunPositionUniform_, camera_.position);
+	program_->setUniformValue(sunColorUniform_, QVector3D(1.0, 1.0, 1.0));
+
+	std::cout << "x: " << camera_.position.x() << std::endl;
+	std::cout << "y: " << camera_.position.y() << std::endl;
+	std::cout << "z: " << camera_.position.z() << std::endl;
 
 	// Draw
 	drawModel(vaoAndEbos_, model_);
