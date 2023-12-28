@@ -10,6 +10,7 @@ public:
 	QVector3D position;
 	QVector3D orientation{0.0f, 0.0f, -1.0f};
 	QVector3D up{0.0f, 1.0f, 0.0f};
+	QVector3D right{1.0f, 0.0f, 0.0f};
 
 	size_t width, height;
 

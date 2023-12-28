@@ -1,5 +1,4 @@
 #include "camera.h"
-#include <iostream>
 
 Camera::Camera(size_t width, size_t height, QVector3D position)
 {
@@ -14,12 +13,8 @@ QMatrix4x4 Camera::update(float fovd, float near, float far, size_t totalFrameCo
 	// Calculate MVP matrix
 	model.setToIdentity();
 	model.translate(0, 0, -2);
-	// This is temporary
-	float angle = (float)totalFrameCount_ * 0.5f;
 
-//	model.rotate(angle, {0.f, 1.f, 0.f});
 	view.setToIdentity();
-//	view.lookAt(position, position + orientation, up);
 	view.rotate(rotationX, 1.0, 0.0, 0.0);
 	view.rotate(rotationY, 0.0, 1.0, 0.0);
 	view.translate(position);
@@ -27,7 +22,12 @@ QMatrix4x4 Camera::update(float fovd, float near, float far, size_t totalFrameCo
 	QVector4D newOrientation4D = QVector4D(orientation, 0.0) * view;
 	QVector3D newOrientation = newOrientation4D.toVector3D();
 
-	position += newOrientation * movement;
+	QVector4D newRight4D = QVector4D(right, 0.0) * view;
+	QVector3D newRight = newRight4D.toVector3D();
+
+	position += -movement.z() * newOrientation;
+	position += movement.x() * newRight;
+	position += {0.0, movement.y(), 0.0};
 	movement = {0.0, 0.0, 0.0};
 
 	projection.setToIdentity();
@@ -41,27 +41,27 @@ void Camera::input(QKeyEvent * event, bool)
 	switch( event->key() )
 	{
 		case Qt::Key_W:
-			movement += {0.0, 0.0, -speed};
-			break;
-
-		case Qt::Key_A:
-			movement += {-speed, 0.0, 0.0};
-			break;
-
-		case Qt::Key_S:
 			movement += {0.0, 0.0, speed};
 			break;
 
-		case Qt::Key_D:
+		case Qt::Key_A:
 			movement += {speed, 0.0, 0.0};
 			break;
 
+		case Qt::Key_S:
+			movement += {0.0, 0.0, -speed};
+			break;
+
+		case Qt::Key_D:
+			movement += {-speed, 0.0, 0.0};
+			break;
+
 		case Qt::Key_Up:
-			movement += {0.0, speed, 0.0};
+			movement += {0.0, -speed, 0.0};
 			break;
 
 		case Qt::Key_Down:
-			movement += {0.0, -speed, 0.0};
+			movement += {0.0, speed, 0.0};
 			break;
 
 		default:
