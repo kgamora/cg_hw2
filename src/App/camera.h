@@ -11,12 +11,19 @@ public:
 	QVector3D orientation{0.0f, 0.0f, -1.0f};
 	QVector3D up{0.0f, 1.0f, 0.0f};
 
+	size_t width, height;
+
+	QVector3D localOrientation{0.0f, 0.0f, -1.0f};
+	float rotationX = 0, rotationY = 0;
+	QVector3D movement{0.0f, 0.0f, 0.0f};
+
 	bool firstClick = true;
+	QPointF prevPos;
 
 	float aspect = 1.0f;
 
 	float speed = 0.1f;
-	float sensitivity = 100.0f;
+	float sensitivity = 0.1f;
 
 	QMatrix4x4 model;
 	QMatrix4x4 view;

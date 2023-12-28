@@ -79,4 +79,5 @@ private:
 
 protected:
 	void keyPressEvent(QKeyEvent * e) override;
+	void mouseMoveEvent(QMouseEvent* e) override;
 };

@@ -40,6 +40,7 @@ Window::Window() noexcept
 	connect(this, &Window::updateUI, [=] {
 		fps->setText(formatFPS(ui_.fps));
 	});
+	setMouseTracking(true);
 }
 
 Window::~Window()
@@ -120,6 +121,7 @@ void bindMesh(std::map<int, GLuint>& vbos,
 			if (attrib.first.compare("NORMAL") == 0) vaa = 1;
 			if (attrib.first.compare("TEXCOORD_0") == 0) vaa = 2;
 			if (vaa > -1) {
+				std::cout << "vaa not missing: " << attrib.first << std::endl;
 				funcs.glEnableVertexAttribArray(vaa);
 				funcs.glVertexAttribPointer(vaa, size, accessor.componentType,
 									  accessor.normalized ? GL_TRUE : GL_FALSE,
@@ -341,6 +343,11 @@ Window::PerfomanceMetricsGuard::PerfomanceMetricsGuard(std::function<void()> cal
 void Window::keyPressEvent(QKeyEvent * e)
 {
 	camera_.input(e, true);
+}
+
+void Window::mouseMoveEvent(QMouseEvent* e)
+{
+	camera_.input(e);
 }
 
 Window::PerfomanceMetricsGuard::~PerfomanceMetricsGuard()
