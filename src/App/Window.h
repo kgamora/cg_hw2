@@ -54,6 +54,7 @@ private:
 	Camera camera_;
 
 	GLint mvpUniform_ = -1;
+	GLint mUniform_ = -1;
 	GLint sunPositionUniform_ = -1;
 	GLint sunColorUniform_ = -1;
 

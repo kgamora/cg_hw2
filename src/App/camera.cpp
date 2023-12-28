@@ -12,7 +12,7 @@ QMatrix4x4 Camera::update(float fovd, float near, float far, size_t totalFrameCo
 {
 	// Calculate MVP matrix
 	model.setToIdentity();
-	model.translate(0, 0, -2);
+	// model.translate(0, 0, -2);
 
 	view.setToIdentity();
 	view.rotate(rotationX, 1.0, 0.0, 0.0);

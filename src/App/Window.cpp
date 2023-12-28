@@ -279,6 +279,7 @@ void Window::onInit()
 	mvpUniform_ = program_->uniformLocation("mvp");
 	sunPositionUniform_ = program_->uniformLocation("sun_position");
 	sunColorUniform_ = program_->uniformLocation("sun_color");
+	mUniform_ = program_->uniformLocation("m");
 
 	// Release all
 	program_->release();
@@ -309,6 +310,7 @@ void Window::onRender()
 	program_->setUniformValue(mvpUniform_, camera_.update(fov, zNear, zFar, totalFrameCount_));
 
 	program_->setUniformValue(sunPositionUniform_, camera_.position);
+	program_->setUniformValue(mUniform_, camera_.model);
 	program_->setUniformValue(sunColorUniform_, QVector3D(1.0, 1.0, 1.0));
 
 	// Draw
