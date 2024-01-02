@@ -37,16 +37,14 @@ void main() {
     float uncond_light_coef = 0.1, sun_light_coef = 0.6, spotlight_coef = 0.3;
 
     // calculate sun light
-    vec3 normal = normalize(-Normal);
+    vec3 normal = normalize(Normal);
     vec3 sunPosition = apply_M(sun_position);
     vec3 sun_direction = normalize(sunPosition - position);
     float sun_lum = max(dot(sun_direction, normal), 0.0);
     vec3 sun_light = (sun_light_coef * sun_lum) * sun_color;
 
     // calculate spotlight
-    // vec3 spotlightFallVector = normalize(apply_M(vec3(-spotlight_position.xy, spotlight_position.z)) - position);
     vec3 spotlightFallVector = normalize(spotlight_position - position);
-    // float spotlight_cos = dot(normalize(vec3(-spotlight_direction.xy, spotlight_direction.z)), spotlightFallVector);
     float spotlight_cos = dot(spotlightFallVector, normalize(-spotlight_direction));
     float spotlight_lum = float(spotlight_cos >= spotlight_first_cos);
     vec3 spotlight = (spotlight_coef * spotlight_lum) * spotlight_color;
@@ -60,6 +58,6 @@ void main() {
     // for debugging purposes
     // out_col = vec4(uncond_light_coef + sun_light, 1.0);
     // out_col = vec4((spotlight_cos * 0.5) + 0.5, uncond_light_coef, uncond_light_coef, 1.0);
-    out_col = vec4(spotlight_lum, uncond_light_coef, uncond_light_coef, 1.0);
+    // out_col = vec4(spotlight_lum, uncond_light_coef, uncond_light_coef, 1.0);
     // out_col = vec4(normal.xyz, 1.0);
 }

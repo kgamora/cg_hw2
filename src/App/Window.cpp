@@ -87,16 +87,11 @@ void bindMesh(std::map<int, GLuint>& vbos,
 		}
 
 		const tinygltf::Buffer &buffer = model.buffers[bufferView.buffer];
-		std::cout << "bufferview.target " << bufferView.target << std::endl;
 
 		GLuint vbo;
 		funcs.glGenBuffers(1, &vbo);
 		vbos[i] = vbo;
 		funcs.glBindBuffer(bufferView.target, vbo);
-
-		std::cout << "buffer.data.size = " << buffer.data.size()
-				  << ", bufferview.byteOffset = " << bufferView.byteOffset
-				  << std::endl;
 
 		funcs.glBufferData(bufferView.target, bufferView.byteLength,
 					 &buffer.data.at(0) + bufferView.byteOffset, GL_STATIC_DRAW);
@@ -122,7 +117,6 @@ void bindMesh(std::map<int, GLuint>& vbos,
 			if (attrib.first.compare("NORMAL") == 0) vaa = 1;
 			if (attrib.first.compare("TEXCOORD_0") == 0) vaa = 2;
 			if (vaa > -1) {
-				std::cout << "vaa not missing: " << attrib.first << std::endl;
 				funcs.glEnableVertexAttribArray(vaa);
 				funcs.glVertexAttribPointer(vaa, size, accessor.componentType,
 									  accessor.normalized ? GL_TRUE : GL_FALSE,
@@ -169,7 +163,6 @@ void bindMesh(std::map<int, GLuint>& vbos,
 					// ???
 				}
 
-				std::cout << "binding texture" << std::endl;
 				funcs.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0,
 							 format, type, &image.image.at(0));
 			}
@@ -272,7 +265,6 @@ void Window::onInit()
 	if (!loadModel(model_, filename.c_str())) return;
 
 	vaoAndEbos_ = bindModel(model_);
-	std::cout << "model binded" << std::endl;
 
 	// Bind attributes
 	program_->bind();
@@ -320,7 +312,7 @@ void Window::onRender()
 	program_->setUniformValue(sunPositionUniform_, camera_.position);
 	program_->setUniformValue(spotlightPositionUniform_, camera_.position);
 	program_->setUniformValue(sunColorUniform_, QVector3D(1.0, 1.0, 1.0));
-	program_->setUniformValue(spotlightColorUniform_, QVector3D(1.0, 0.0, 0.0));
+	program_->setUniformValue(spotlightColorUniform_, QVector3D(1.0, 1.0, 1.0));
 	program_->setUniformValue(spotlightDirectionUniform_, direction);
 	program_->setUniformValue(spotlightFirstCosUniform_, GLfloat(std::cos(15.0f * M_PIf / 180.0f)));
 
@@ -380,9 +372,9 @@ auto Window::captureMetrics() -> PerfomanceMetricsGuard
 				const auto elapsedSeconds = static_cast<float>(timer_.restart()) / 1000.0f;
 				ui_.fps = static_cast<size_t>(std::round(frameCount_ / elapsedSeconds));
 				frameCount_ = 0;
-				printf("pos: {x: %f, y: %f, z: %f}\n", camera_.position.x(), camera_.position.y(), camera_.position.z());
-				printf("dir: {x: %f, y: %f, z: %f}\n", camera_.orientation.x(), camera_.orientation.y(), camera_.orientation.z());
-				std::cout << std::flush;
+//				printf("pos: {x: %f, y: %f, z: %f}\n", camera_.position.x(), camera_.position.y(), camera_.position.z());
+//				printf("dir: {x: %f, y: %f, z: %f}\n", camera_.orientation.x(), camera_.orientation.y(), camera_.orientation.z());
+//				std::cout << std::flush;
 				emit updateUI();
 			}
 		}
