@@ -7,7 +7,7 @@
 class Camera
 {
 public:
-	QVector3D position;
+	QVector3D position{0.0f, 0.0f, 1.5f};
 	QVector3D orientation{0.0f, 0.0f, -1.0f};
 	QVector3D up{0.0f, 1.0f, 0.0f};
 	QVector3D right{1.0f, 0.0f, 0.0f};
@@ -33,7 +33,7 @@ public:
 	Camera() = default;
 	Camera(size_t width, size_t height, QVector3D position);
 
-	QMatrix4x4 update(float fovd, float near, float far, size_t totalFrameCount_);
+	std::tuple<QMatrix4x4, QMatrix4x4, QMatrix4x4, QVector3D> update(float fovd, float near, float far, size_t totalFrameCount_);
 	void input(QKeyEvent * event, bool release);
 	void input(QMouseEvent* event);
 	void resize(size_t width, size_t height);

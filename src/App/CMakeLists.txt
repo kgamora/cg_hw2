@@ -5,6 +5,7 @@ set(SRCS
     camera.cpp
     camera.h
     tiny_gltf.h
+    glm
 
     Shaders/diffuse.fs
     Shaders/diffuse.vs
@@ -22,4 +23,5 @@ target_link_libraries(demo-app
         Qt5::Widgets
         FGL::Base
         thirdparty::tinygltf
+        thirdparty::glm
 )

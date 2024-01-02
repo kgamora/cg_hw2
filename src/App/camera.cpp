@@ -1,5 +1,9 @@
 #include "camera.h"
 
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include<glm/gtx/rotate_vector.hpp>
+
 Camera::Camera(size_t width, size_t height, QVector3D position)
 {
 	Camera::width = width;
@@ -8,24 +12,35 @@ Camera::Camera(size_t width, size_t height, QVector3D position)
 	Camera::position = position;
 }
 
-QMatrix4x4 Camera::update(float fovd, float near, float far, size_t totalFrameCount_)
+glm::vec3 toGLMVec3(QVector3D in) {
+	return {in.x(), in.y(), in.z()};
+}
+
+QVector3D toQVec3(glm::vec3 in) {
+	return {in.x, in.y, in.z};
+}
+
+std::tuple<QMatrix4x4, QMatrix4x4, QMatrix4x4, QVector3D> Camera::update(float fovd, float near, float far, size_t totalFrameCount_)
 {
 	// Calculate MVP matrix
 	model.setToIdentity();
-	// model.translate(0, 0, -2);
+
+	glm::vec3 glmOrientation = toGLMVec3(orientation);
+	glm::vec3 glmUp = toGLMVec3(up);
+	glm::vec3 glmNewOrientation = glm::rotate(glmOrientation, glm::radians(-rotationX), glm::normalize(glm::cross(glmOrientation, glmUp)));
+	glmNewOrientation = glm::rotate(glmNewOrientation, glm::radians(-rotationY), glmUp);
+	rotationX = 0, rotationY = 0;
+	orientation = toQVec3(glmNewOrientation);
 
 	view.setToIdentity();
-	view.rotate(rotationX, 1.0, 0.0, 0.0);
-	view.rotate(rotationY, 0.0, 1.0, 0.0);
-	view.translate(position);
+	view.lookAt(position, position + orientation, up);
 
-	QVector4D newOrientation4D = QVector4D(orientation, 0.0) * view;
-	QVector3D newOrientation = newOrientation4D.toVector3D();
+	QVector4D newRight4D = QVector4D(right, 1.0) * view;
+	QVector3D newRight = newRight4D.toVector3D().normalized();
 
-	QVector4D newRight4D = QVector4D(right, 0.0) * view;
-	QVector3D newRight = newRight4D.toVector3D();
+	// view.translate(position);
 
-	position += -movement.z() * newOrientation;
+	position += movement.z() * orientation;
 	position += movement.x() * newRight;
 	position += {0.0, movement.y(), 0.0};
 	movement = {0.0, 0.0, 0.0};
@@ -33,7 +48,7 @@ QMatrix4x4 Camera::update(float fovd, float near, float far, size_t totalFrameCo
 	projection.setToIdentity();
 	projection.perspective(fovd, aspect, near, far);
 
-	return projection * view * model;
+	return {model, view, projection, orientation};
 }
 
 void Camera::input(QKeyEvent * event, bool)
@@ -45,7 +60,7 @@ void Camera::input(QKeyEvent * event, bool)
 			break;
 
 		case Qt::Key_A:
-			movement += {speed, 0.0, 0.0};
+			movement += {-speed, 0.0, 0.0};
 			break;
 
 		case Qt::Key_S:
@@ -53,15 +68,15 @@ void Camera::input(QKeyEvent * event, bool)
 			break;
 
 		case Qt::Key_D:
-			movement += {-speed, 0.0, 0.0};
+			movement += {speed, 0.0, 0.0};
 			break;
 
 		case Qt::Key_Up:
-			movement += {0.0, -speed, 0.0};
+			movement += {0.0, speed, 0.0};
 			break;
 
 		case Qt::Key_Down:
-			movement += {0.0, speed, 0.0};
+			movement += {0.0, -speed, 0.0};
 			break;
 
 		default:

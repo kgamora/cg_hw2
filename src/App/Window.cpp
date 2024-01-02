@@ -8,6 +8,7 @@
 #include <QScreen>
 
 #include <array>
+#include <cmath>
 #include <iostream>
 
 #define TINYGLTF_IMPLEMENTATION
@@ -276,10 +277,15 @@ void Window::onInit()
 	// Bind attributes
 	program_->bind();
 
-	mvpUniform_ = program_->uniformLocation("mvp");
+	mUniform_ = program_->uniformLocation("m");
+	vUniform_ = program_->uniformLocation("v");
+	pUniform_ = program_->uniformLocation("p");
 	sunPositionUniform_ = program_->uniformLocation("sun_position");
 	sunColorUniform_ = program_->uniformLocation("sun_color");
-	mUniform_ = program_->uniformLocation("m");
+	spotlightPositionUniform_ = program_->uniformLocation("spotlight_position");
+	spotlightColorUniform_ = program_->uniformLocation("spotlight_color");
+	spotlightDirectionUniform_ = program_->uniformLocation("spotlight_direction");
+	spotlightFirstCosUniform_ = program_->uniformLocation("spotlight_first_cos");
 
 	// Release all
 	program_->release();
@@ -292,7 +298,7 @@ void Window::onInit()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Create camera
-	camera_ = Camera(800, 800, {0, 0, -0.3});
+	camera_ = Camera(800, 800, {0, 0, 1.0});
 }
 
 void Window::onRender()
@@ -307,11 +313,16 @@ void Window::onRender()
 	const auto fov = 60.0f;
 	const auto zNear = 0.1f;
 	const auto zFar = 100.0f;
-	program_->setUniformValue(mvpUniform_, camera_.update(fov, zNear, zFar, totalFrameCount_));
-
+	auto [m, v, p, direction] = camera_.update(fov, zNear, zFar, totalFrameCount_);
+	program_->setUniformValue(mUniform_, m);
+	program_->setUniformValue(vUniform_, v);
+	program_->setUniformValue(pUniform_, p);
 	program_->setUniformValue(sunPositionUniform_, camera_.position);
-	program_->setUniformValue(mUniform_, camera_.model);
+	program_->setUniformValue(spotlightPositionUniform_, camera_.position);
 	program_->setUniformValue(sunColorUniform_, QVector3D(1.0, 1.0, 1.0));
+	program_->setUniformValue(spotlightColorUniform_, QVector3D(1.0, 0.0, 0.0));
+	program_->setUniformValue(spotlightDirectionUniform_, direction);
+	program_->setUniformValue(spotlightFirstCosUniform_, GLfloat(std::cos(15.0f * M_PIf / 180.0f)));
 
 	// Draw
 	drawModel(vaoAndEbos_, model_);
@@ -369,6 +380,9 @@ auto Window::captureMetrics() -> PerfomanceMetricsGuard
 				const auto elapsedSeconds = static_cast<float>(timer_.restart()) / 1000.0f;
 				ui_.fps = static_cast<size_t>(std::round(frameCount_ / elapsedSeconds));
 				frameCount_ = 0;
+				printf("pos: {x: %f, y: %f, z: %f}\n", camera_.position.x(), camera_.position.y(), camera_.position.z());
+				printf("dir: {x: %f, y: %f, z: %f}\n", camera_.orientation.x(), camera_.orientation.y(), camera_.orientation.z());
+				std::cout << std::flush;
 				emit updateUI();
 			}
 		}

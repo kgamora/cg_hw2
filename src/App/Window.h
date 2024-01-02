@@ -53,10 +53,13 @@ signals:
 private:
 	Camera camera_;
 
-	GLint mvpUniform_ = -1;
-	GLint mUniform_ = -1;
+	GLint mUniform_ = -1, vUniform_ = -1, pUniform_ = -1;
 	GLint sunPositionUniform_ = -1;
 	GLint sunColorUniform_ = -1;
+	GLint spotlightPositionUniform_ = -1;
+	GLint spotlightColorUniform_ = -1;
+	GLint spotlightDirectionUniform_ = -1;
+	GLint spotlightFirstCosUniform_ = -1;
 
 	QOpenGLBuffer vbo_{QOpenGLBuffer::Type::VertexBuffer};
 	QOpenGLBuffer ibo_{QOpenGLBuffer::Type::IndexBuffer};
@@ -69,6 +72,7 @@ private:
 	std::pair<GLuint, std::map<int, GLuint>> vaoAndEbos_;
 
 	QElapsedTimer timer_;
+	QElapsedTimer timer2_;
 	size_t frameCount_ = 0;
 	size_t totalFrameCount_ = 0;
 
