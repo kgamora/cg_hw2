@@ -278,6 +278,7 @@ void Window::onInit()
 	spotlightColorUniform_ = program_->uniformLocation("spotlight_color");
 	spotlightDirectionUniform_ = program_->uniformLocation("spotlight_direction");
 	spotlightFirstCosUniform_ = program_->uniformLocation("spotlight_first_cos");
+	spotlightSecondCosUniform_ = program_->uniformLocation("spotlight_second_cos");
 
 	// Release all
 	program_->release();
@@ -311,10 +312,11 @@ void Window::onRender()
 	program_->setUniformValue(pUniform_, p);
 	program_->setUniformValue(sunPositionUniform_, camera_.position);
 	program_->setUniformValue(spotlightPositionUniform_, camera_.position);
-	program_->setUniformValue(sunColorUniform_, QVector3D(1.0, 1.0, 1.0));
-	program_->setUniformValue(spotlightColorUniform_, QVector3D(1.0, 1.0, 1.0));
+	program_->setUniformValue(sunColorUniform_, sunColor_);
+	program_->setUniformValue(spotlightColorUniform_, spotlightColor_);
 	program_->setUniformValue(spotlightDirectionUniform_, direction);
-	program_->setUniformValue(spotlightFirstCosUniform_, GLfloat(std::cos(15.0f * M_PIf / 180.0f)));
+	program_->setUniformValue(spotlightFirstCosUniform_, GLfloat(std::cos(spotlightFirstAngle_ * M_PIf / 180.0f)));
+	program_->setUniformValue(spotlightSecondCosUniform_, GLfloat(std::cos(spotlightSecondAngle_ * M_PIf / 180.0f)));
 
 	// Draw
 	drawModel(vaoAndEbos_, model_);
@@ -372,9 +374,6 @@ auto Window::captureMetrics() -> PerfomanceMetricsGuard
 				const auto elapsedSeconds = static_cast<float>(timer_.restart()) / 1000.0f;
 				ui_.fps = static_cast<size_t>(std::round(frameCount_ / elapsedSeconds));
 				frameCount_ = 0;
-//				printf("pos: {x: %f, y: %f, z: %f}\n", camera_.position.x(), camera_.position.y(), camera_.position.z());
-//				printf("dir: {x: %f, y: %f, z: %f}\n", camera_.orientation.x(), camera_.orientation.y(), camera_.orientation.z());
-//				std::cout << std::flush;
 				emit updateUI();
 			}
 		}

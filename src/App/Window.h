@@ -53,13 +53,16 @@ signals:
 private:
 	Camera camera_;
 
-	GLint mUniform_ = -1, vUniform_ = -1, pUniform_ = -1;
-	GLint sunPositionUniform_ = -1;
+	GLint mUniform_ = -1, vUniform_ = -1, pUniform_ = -1; // to matrices? struct
+	GLint sunPositionUniform_ = -1; // to light struct
 	GLint sunColorUniform_ = -1;
 	GLint spotlightPositionUniform_ = -1;
 	GLint spotlightColorUniform_ = -1;
 	GLint spotlightDirectionUniform_ = -1;
-	GLint spotlightFirstCosUniform_ = -1;
+	GLint spotlightFirstCosUniform_ = -1, spotlightSecondCosUniform_ = -1; // to vec2
+
+	float spotlightFirstAngle_ = 13.0, spotlightSecondAngle_ = spotlightFirstAngle_ + 4.0;
+	QVector3D sunColor_= QVector3D(1.0, 1.0, 1.0), spotlightColor_ = QVector3D(1.0, 1.0, 1.0);
 
 	QOpenGLBuffer vbo_{QOpenGLBuffer::Type::VertexBuffer};
 	QOpenGLBuffer ibo_{QOpenGLBuffer::Type::IndexBuffer};
