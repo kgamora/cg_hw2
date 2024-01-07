@@ -1,5 +1,7 @@
 set(SRCS
     main.cpp
+    mainwindow.cpp
+    mainwindow.h
     Window.cpp
     Window.h
     camera.cpp

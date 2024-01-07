@@ -24,23 +24,10 @@ namespace {
 
 Window::Window() noexcept
 {
-	const auto formatFPS = [](const auto value) {
-		return QString("FPS: %1").arg(QString::number(value));
-	};
-
-	auto fps = new QLabel(formatFPS(0), this);
-	fps->setStyleSheet("QLabel { color : white; }");
-
-	auto layout = new QVBoxLayout();
-	layout->addWidget(fps, 1);
-
-	setLayout(layout);
+	setFocusPolicy(Qt::StrongFocus);
 
 	timer_.start();
 
-	connect(this, &Window::updateUI, [=] {
-		fps->setText(formatFPS(ui_.fps));
-	});
 	setMouseTracking(true);
 }
 
@@ -310,13 +297,13 @@ void Window::onRender()
 	program_->setUniformValue(mUniform_, m);
 	program_->setUniformValue(vUniform_, v);
 	program_->setUniformValue(pUniform_, p);
-	program_->setUniformValue(sunPositionUniform_, camera_.position);
+	program_->setUniformValue(sunPositionUniform_, lightPos);
 	program_->setUniformValue(spotlightPositionUniform_, camera_.position);
 	program_->setUniformValue(sunColorUniform_, sunColor_);
 	program_->setUniformValue(spotlightColorUniform_, spotlightColor_);
 	program_->setUniformValue(spotlightDirectionUniform_, direction);
-	program_->setUniformValue(spotlightFirstCosUniform_, GLfloat(std::cos(spotlightFirstAngle_ * M_PIf / 180.0f)));
-	program_->setUniformValue(spotlightSecondCosUniform_, GLfloat(std::cos(spotlightSecondAngle_ * M_PIf / 180.0f)));
+	program_->setUniformValue(spotlightFirstCosUniform_, GLfloat(std::cos((spotlightFirstAngle_ / 10) * M_PIf / 180.0f)));
+	program_->setUniformValue(spotlightSecondCosUniform_, GLfloat(std::cos((spotlightSecondAngle_ / 10) * M_PIf / 180.0f)));
 
 	// Draw
 	drawModel(vaoAndEbos_, model_);
@@ -372,10 +359,34 @@ auto Window::captureMetrics() -> PerfomanceMetricsGuard
 			if (timer_.elapsed() >= 1000)
 			{
 				const auto elapsedSeconds = static_cast<float>(timer_.restart()) / 1000.0f;
-				ui_.fps = static_cast<size_t>(std::round(frameCount_ / elapsedSeconds));
+				uint fps = static_cast<size_t>(std::round(frameCount_ / elapsedSeconds));
 				frameCount_ = 0;
-				emit updateUI();
+				emit updateFPS(fps);
+				std::cout << std::flush;
 			}
 		}
 	};
+}
+
+void Window::setInnerCircleAngle(float angle)
+{
+	spotlightFirstAngle_ = angle;
+	spotlightSecondAngle_ = spotlightFirstAngle_ + angle;
+	update();
+}
+
+void Window::setOuterCircleAngle(float angle)
+{
+	spotlightSecondAngle_ = spotlightFirstAngle_ + angle;
+	update();
+}
+
+void Window::setLightX(float new_x)
+{
+	lightPos.setX(new_x / 100.0f);
+}
+
+void Window::setLightZ(float new_z)
+{
+	lightPos.setZ(new_z / 100.0f);
 }
