@@ -1,13 +1,13 @@
 ![build_cmake_status](https://github.com/sadads1337/mse-gl-hw-template/actions/workflows/build_cmake.yml/badge.svg)
 
-# ITMO MSE OpenGL homework template 2022
+# ITMO MSE OpenGL homework 2 2023-2024
 
-Qt based demo project to demonstrate how to use and implement basic 3D graphics features.
+Qt based project to demonstrate how I can complete this assignment.
 No optimizations exists. Use only for educational purposes.
 
-## Purposes
+## Precautions
 
-Help students with their submission is the main goal of this repository. Do not use this code in production!!!
+Do not use this code in production!!!
 
 ## Requirements
 
@@ -20,7 +20,7 @@ Help students with their submission is the main goal of this repository. Do not 
 
 ## Assets
 
-- [KhronosGroup/glTF-Sample-Models](https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0)
+- [Cassette tape by joshtmc](https://sketchfab.com/3d-models/cassette-tape-4613411c569d4185a2e07f31b1bf9e49#download)
 
 ## 3d-party libs
 
@@ -32,20 +32,21 @@ Help students with their submission is the main goal of this repository. Do not 
 
 - GPU with OpenGL 3+ support.
 
-## Build from console
+## Build from QT Creator
 
 - Clone this repository `git clone <url> <path>`;
-- Go to root folder `cd <path-to-repo-root>`;
-- Create and go to build folder `mkdir -p build-release; cd build-release`;
-- Run CMake `cmake .. -G <generator-name> -DCMAKE_PREFIX_PATH=<path-to-qt-installation> -DCMAKE_BUILD_TYPE=Release`;
-- Run build. For Ninja generator it looks like `ninja -j<number-of-threads-to-build>`.
+- Open this project
+- Smash the green "Run" button
 
-## Build with MSVC
+## Run and debug from QT Creator
 
-- Clone this repository `git clone <url> <path>`;
-- Open root folder in IDE;
-- Build, possibly specify build configurations and path to Qt library.
+- Smash the green "Run" button
 
-## Run and debug
+## Controls
 
-- Since we link with Qt dynamically don't forget to add `<qt-path>/<abi-arch>/bin` and `<qt-path>/<abi-arch>/plugins/platforms` to `PATH` variable.
+> W - forward
+> S - back
+> A - left
+> D - right
+> KEY_UP - up
+> KEY_DOWN - down
