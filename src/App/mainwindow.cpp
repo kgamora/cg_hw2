@@ -40,11 +40,18 @@ MainWindow::MainWindow()
 	lightZSlider->setMaximum(Window::MAX_COORD);
 	lightZSlider->setValue(Window::DEFAULT_Z);
 
+	QSlider* morphSlider = new QSlider(Qt::Horizontal);
+
+	morphSlider->setMinimum(Window::MIN_PROGRESS);
+	morphSlider->setMaximum(Window::MAX_PROGRESS);
+	morphSlider->setValue(0);
+
 	fpsLabel_ = new QLabel();
 	fpsLabel_->setText("...");
 
 	QFormLayout* formLayout = new QFormLayout();
 
+	formLayout->addRow("Morph progress:", morphSlider);
 	formLayout->addRow("Spot inner circle angle: ", innerCircleAngleSlider);
 	formLayout->addRow("Spot outer circle angle:", outerCircleAngleSlider);
 	formLayout->addRow("Light X:", lightXSlider);
@@ -59,6 +66,7 @@ MainWindow::MainWindow()
 	Window* windowWidget = new Window;
 	windowWidget->setFormat(format);
 
+	connect(morphSlider, &QSlider::valueChanged, windowWidget, &Window::setMorphingProgress);
 	connect(innerCircleAngleSlider, &QSlider::valueChanged, windowWidget, &Window::setInnerCircleAngle);
 	connect(outerCircleAngleSlider, &QSlider::valueChanged, windowWidget, &Window::setOuterCircleAngle);
 	connect(lightXSlider, &QSlider::valueChanged, windowWidget, &Window::setLightX);

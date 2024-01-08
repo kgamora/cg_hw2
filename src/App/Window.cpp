@@ -266,6 +266,7 @@ void Window::onInit()
 	spotlightDirectionUniform_ = program_->uniformLocation("spotlight_direction");
 	spotlightFirstCosUniform_ = program_->uniformLocation("spotlight_first_cos");
 	spotlightSecondCosUniform_ = program_->uniformLocation("spotlight_second_cos");
+	morphingProgressUniform_ = program_->uniformLocation("morhping_progress");
 
 	// Release all
 	program_->release();
@@ -304,6 +305,7 @@ void Window::onRender()
 	program_->setUniformValue(spotlightDirectionUniform_, direction);
 	program_->setUniformValue(spotlightFirstCosUniform_, GLfloat(std::cos((spotlightFirstAngle_ / 10) * M_PIf / 180.0f)));
 	program_->setUniformValue(spotlightSecondCosUniform_, GLfloat(std::cos((spotlightSecondAngle_ / 10) * M_PIf / 180.0f)));
+	program_->setUniformValue(morphingProgressUniform_, morphingProgress_);
 
 	// Draw
 	drawModel(vaoAndEbos_, model_);
@@ -362,7 +364,6 @@ auto Window::captureMetrics() -> PerfomanceMetricsGuard
 				uint fps = static_cast<size_t>(std::round(frameCount_ / elapsedSeconds));
 				frameCount_ = 0;
 				emit updateFPS(fps);
-				std::cout << std::flush;
 			}
 		}
 	};
@@ -389,4 +390,9 @@ void Window::setLightX(float new_x)
 void Window::setLightZ(float new_z)
 {
 	lightPos.setZ(new_z / 100.0f);
+}
+
+void Window::setMorphingProgress(float newProgress)
+{
+	morphingProgress_ = newProgress / 100.0f;
 }

@@ -35,6 +35,9 @@ public:
 	constexpr static float MAX_COORD = 100;
 	constexpr static float DEFAULT_X = 0;
 	constexpr static float DEFAULT_Z = 100;
+	constexpr static float MIN_PROGRESS = 0;
+	constexpr static float MAX_PROGRESS = 100;
+
 
 private:
 	class PerfomanceMetricsGuard final
@@ -64,6 +67,7 @@ public slots:
 	void setOuterCircleAngle(float);
 	void setLightX(float);
 	void setLightZ(float);
+	void setMorphingProgress(float);
 
 private:
 	Camera camera_;
@@ -75,10 +79,12 @@ private:
 	GLint spotlightColorUniform_ = -1;
 	GLint spotlightDirectionUniform_ = -1;
 	GLint spotlightFirstCosUniform_ = -1, spotlightSecondCosUniform_ = -1; // to vec2
+	GLint morphingProgressUniform_ = -1;
 
 	float spotlightFirstAngle_ = DEFAULT_ANGLE, spotlightSecondAngle_ = spotlightFirstAngle_ + DEFAULT_ANGLE;
 	QVector3D sunColor_= QVector3D(1.0, 1.0, 1.0), spotlightColor_ = QVector3D(1.0, 1.0, 1.0);
 	QVector3D lightPos = {DEFAULT_X, 2, DEFAULT_Z / 100.f};
+	GLfloat morphingProgress_ = 0;
 
 	QOpenGLBuffer vbo_{QOpenGLBuffer::Type::VertexBuffer};
 	QOpenGLBuffer ibo_{QOpenGLBuffer::Type::IndexBuffer};
